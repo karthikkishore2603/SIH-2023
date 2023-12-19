@@ -24,9 +24,16 @@ def login():
     password = request.form.get("password")
     if username == "kk" and password == "kk":
         print("Login Successful")
+        return redirect(url_for("dashboard"))
     else:
         print("Login Failed")
-    return redirect(url_for("camera_view"))
+        return redirect(url_for("index"))
+    
+
+@app.get("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
 
 @app.get("/camera_view")
 def camera_view():

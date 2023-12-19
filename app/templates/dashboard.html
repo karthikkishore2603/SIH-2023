@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VMS Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <script src="https://kit.fontawesome.com/623b0bceda.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <div class="titles">
+        <h1>Video Applications</h1>
+    </div>
+
+    <div class="main_items">
+        <div class="item">
+            <a href="{{ url_for('camera_view') }}" style="text-decoration:none;"> 
+            <div class="item_icon">
+            <i class="fa-solid fa-video fa-4x"  style="color: #fe9539;"></i>
+            </div>
+            <h2>Live View</h2></a>
+        </div>
+
+        <div class="item">
+            <div class="item_icon">
+            <i class="fa-solid fa-video fa-4x"></i>
+            </div>
+            <h2>Play Back</h2>
+        </div>
+
+        <div class="item">
+            <div class="item_icon">
+            <i class="fa-solid fa-video fa-4x"></i>
+            </div>
+            <h2>Alerts</h2>
+        </div>
+
+    </div>
+
+    <!-- <div class="titles">
+        <h1>Video Applications</h1>
+    </div>
+
+    <div class="main_items">
+        <div class="item">
+            <a href="{{ url_for('camera_view') }}" style="text-decoration:none;"> 
+            <div class="item_icon">
+            <i class="fa-solid fa-video fa-4x"  style="color: #fe9539;"></i>
+            </div>
+            <h2>Live View</h2></a>
+        </div>
+
+        <div class="item">
+            <div class="item_icon">
+            <i class="fa-solid fa-video fa-4x"></i>
+            </div>
+            <h2>Live View</h2>
+        </div>
+
+        <div class="item">
+            <div class="item_icon">
+            <i class="fa-solid fa-video fa-4x"></i>
+            </div>
+            <h2>Live View</h2>
+        </div>
+
+    </div> -->
+
+</body>
+</html>
