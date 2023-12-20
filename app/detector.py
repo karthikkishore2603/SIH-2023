@@ -12,8 +12,8 @@ class WeaponDetector:
         print("Using Device: ", self.device)
 
     def get_video_capture(self):
-        return cv2.VideoCapture(self.capture_index)
-    
+        # return cv2.VideoCapture(self.capture_index)
+        return cv2.VideoCapture('http://100.68.52.174:8080')
     def load_model(self, model_name):
         if model_name:
             model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_name, force_reload=True)
@@ -28,6 +28,13 @@ class WeaponDetector:
         results = self.model(frame)
         results = self.model(frame)
         labels, cord = results.xyxyn[0][:, -1], results.xyxyn[0][:, :-1]
+
+        # if len(labels) == 0:
+        #     print("No weapons detected")
+        # else:
+        #     print("Weapons detected")
+        #     print(labels)
+
         return labels, cord
     
     def class_to_label(self, x):
@@ -77,7 +84,10 @@ class WeaponDetector:
 
 if __name__ == '__main__':
     #Create a new object and execute.
-    detector = WeaponDetector(capture_index=0, model_name='app/views/gnf_best.pt')
+    # model_paths = ['app/views/fall.pt', 'app/views/knief.pt']multi_detector = MultiWeaponDetector(capture_index=0, model_paths=model_paths)
+# 
+
+    detector = WeaponDetector(capture_index=0, model_name='app/views/fall.pt') #+ WeaponDetector(capture_index=0, model_name='app/views/knief.pt')
     detector.runInWindow()
 
 

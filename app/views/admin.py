@@ -11,8 +11,10 @@ from flask import (
     Response,
     jsonify,Flask
 )
+from .. import detector
 #from camera import VideoCamera
 import cv2, numpy as np
+from flask import render_template
 @app.get("/")
 def index():
     return render_template("login.html")
@@ -52,7 +54,8 @@ def gen(camera):
 class VideoCamera(object):
     def __init__(self):
         self.video = cv2.VideoCapture(0)
-        self.detector = WeaponDetector(capture_index=0, model_name='app/views/gnf_best.pt')
+        self.detector = WeaponDetector(capture_index=0, model_name='app/views/fall.pt') #+ WeaponDetector(capture_index=0, model_name='app/views/knief.pt')
+        # self.detectors = [WeaponDetector(capture_index, model_name) for model_name in model_paths]
 
     def __del__(self):
         self.video.release()
@@ -63,7 +66,6 @@ class VideoCamera(object):
         start_time = time()
         results = self.detector.score_frame(frame)
         frame = self.detector.plot_boxes(results, frame)
-
         end_time = time()
         fps = 1/np.round(end_time - start_time, 2)
 
@@ -71,10 +73,45 @@ class VideoCamera(object):
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
     
+
+
+class VideoCamera1(object):
+    def __init__(self):
+        self.video = cv2.VideoCapture('http://10.0.180.221:8080/video')
+        self.detector = WeaponDetector(capture_index=0, model_name='app/views/fall.pt') #+ WeaponDetector(capture_index=0, model_name='app/views/knief.pt')
+        # self.detectors = [WeaponDetector(capture_index, model_name) for model_name in model_paths]
+
+    def __del__(self):
+        self.video.release()
+
+    def get_frame(self):
+        ret, frame = self.video.read()
+        frame = cv2.resize(frame, (416, 416))
+        start_time = time()
+        results = self.detector.score_frame(frame)
+        frame = self.detector.plot_boxes(results, frame)
+        end_time = time()
+        fps = 1/np.round(end_time - start_time, 2)
+
+        cv2.putText(frame, f'FPS: {int(fps)}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+        ret, jpeg = cv2.imencode('.jpg', frame)
+        return jpeg.tobytes()
     
-@app.route("/video_feed")
-def video_feed():
+
+@app.route("/video_feed1")
+def video_feed1():
     return Response(gen(VideoCamera()), mimetype="multipart/x-mixed-replace; boundary=frame")
+
+@app.route("/video_feed2")
+def video_feed2():
+    return Response(gen(VideoCamera1()), mimetype="multipart/x-mixed-replace; boundary=frame")
+
+# model_paths = ['app/views/fall.pt', 'app/views/knief.pt']
+# multi_detector = VideoCamera(capture_index=0, model_paths=model_paths)
+
+# @app.route("/video_feed")
+# def video_feed():
+#     return Response(gen(VideoCamera()), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 # import torch
